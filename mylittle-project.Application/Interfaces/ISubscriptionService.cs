@@ -9,6 +9,6 @@ namespace mylittle_project.Application.Interfaces
 {
     public interface ISubscriptionService
     {
-            Task<int> AssignSubscriptionAsync(SubscriptionDealerDto dto);
+            Task<Guid> AssignSubscriptionAsync(SubscriptionDealerDto dto);
     }
 }

@@ -10,10 +10,10 @@ namespace mylittle_project.Domain.Entities
     {
         public Guid Id { get; set; }
 
-        public string WelcomeMessage { get; set; }
-        public string CallToAction { get; set; }
-        public string HomePageContent { get; set; }
-        public string AboutUs { get; set; }
+        public string WelcomeMessage { get; set; } = string.Empty;
+        public string CallToAction { get; set; } = string.Empty;
+        public string HomePageContent { get; set; } = string.Empty;
+        public string AboutUs { get; set; } = string.Empty;
 
         public Guid TenantId { get; set; }
     }

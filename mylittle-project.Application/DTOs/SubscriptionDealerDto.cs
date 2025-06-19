@@ -8,7 +8,7 @@ namespace mylittle_project.Application.DTOs
 {
     public class SubscriptionDealerDto
     {
-        public int TenantId { get; set; }
+        public Guid TenantId { get; set; }
         public string PortalName { get; set; } = string.Empty;
 
         public List<AssignedCategoryDto> Categories { get; set; } = new List<AssignedCategoryDto>();

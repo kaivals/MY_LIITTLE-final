@@ -23,7 +23,7 @@ namespace mylittle_project.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetOrder(int id)
+        public async Task<IActionResult> GetOrder(Guid id)
         {
             var order = await _orderService.GetOrderByIdAsync(id);
             if (order == null) return NotFound();
@@ -38,7 +38,7 @@ namespace mylittle_project.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateOrder(int id, Order order)
+        public async Task<IActionResult> UpdateOrder(Guid id, Order order)
         {
             if (id != order.Id) return BadRequest();
             var updated = await _orderService.UpdateOrderAsync(order);

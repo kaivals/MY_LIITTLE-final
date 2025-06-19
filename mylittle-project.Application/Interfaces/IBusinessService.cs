@@ -9,6 +9,6 @@ namespace mylittle_project.Application.Interfaces
 {
     public interface IBusinessService
     {
-        Task<int> CreateBusinessInfoAsync(BusinessInfoDto dto);
+        Task<Guid> CreateBusinessInfoAsync(BusinessInfoDto dto);
     }
 }

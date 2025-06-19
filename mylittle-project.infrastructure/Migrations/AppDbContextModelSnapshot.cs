@@ -195,6 +195,29 @@ namespace mylittle_project.infrastructure.Migrations
                     b.ToTable("ActivityLogs");
                 });
 
+            modelBuilder.Entity("mylittle_project.Domain.Entities.AssignedCategory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("SubscriptionDealerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SubscriptionDealerId");
+
+                    b.ToTable("AssignedCategories");
+                });
+
             modelBuilder.Entity("mylittle_project.Domain.Entities.Branding", b =>
                 {
                     b.Property<Guid>("Id")
@@ -224,7 +247,7 @@ namespace mylittle_project.infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("TextId")
+                    b.Property<Guid?>("TextId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -291,11 +314,9 @@ namespace mylittle_project.infrastructure.Migrations
 
             modelBuilder.Entity("mylittle_project.Domain.Entities.BusinessInfo", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("BusinessAddress")
                         .IsRequired()
@@ -446,11 +467,9 @@ namespace mylittle_project.infrastructure.Migrations
 
             modelBuilder.Entity("mylittle_project.Domain.Entities.Dealer", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("City")
                         .IsRequired()
@@ -582,6 +601,9 @@ namespace mylittle_project.infrastructure.Migrations
                     b.Property<int>("DealerId")
                         .HasColumnType("int");
 
+                    b.Property<Guid?>("DealerId1")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
@@ -608,7 +630,7 @@ namespace mylittle_project.infrastructure.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.HasIndex("DealerId");
+                    b.HasIndex("DealerId1");
 
                     b.ToTable("Orders");
                 });
@@ -640,6 +662,30 @@ namespace mylittle_project.infrastructure.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("OrderItems");
+                });
+
+            modelBuilder.Entity("mylittle_project.Domain.Entities.PortalAssignment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("DealerUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("PortalName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DealerUserId");
+
+                    b.ToTable("PortalAssignments");
                 });
 
             modelBuilder.Entity("mylittle_project.Domain.Entities.Product", b =>
@@ -794,11 +840,9 @@ namespace mylittle_project.infrastructure.Migrations
 
             modelBuilder.Entity("mylittle_project.Domain.Entities.SubscriptionDealer", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("AutoRenew")
                         .HasColumnType("bit");
@@ -824,12 +868,39 @@ namespace mylittle_project.infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TenantId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.ToTable("DealerSubscriptions");
+                });
+
+            modelBuilder.Entity("mylittle_project.Domain.Entities.UserDealer", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BusinessInfoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BusinessInfoId");
+
+                    b.ToTable("UserDealers");
                 });
 
             modelBuilder.Entity("AdminUser", b =>
@@ -861,6 +932,13 @@ namespace mylittle_project.infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("mylittle_project.Domain.Entities.AssignedCategory", b =>
+                {
+                    b.HasOne("mylittle_project.Domain.Entities.SubscriptionDealer", null)
+                        .WithMany("Categories")
+                        .HasForeignKey("SubscriptionDealerId");
+                });
+
             modelBuilder.Entity("mylittle_project.Domain.Entities.Branding", b =>
                 {
                     b.HasOne("Tenant", null)
@@ -871,9 +949,7 @@ namespace mylittle_project.infrastructure.Migrations
 
                     b.HasOne("mylittle_project.Domain.Entities.BrandingText", "Text")
                         .WithMany()
-                        .HasForeignKey("TextId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TextId");
 
                     b.Navigation("Text");
                 });
@@ -933,9 +1009,7 @@ namespace mylittle_project.infrastructure.Migrations
 
                     b.HasOne("mylittle_project.Domain.Entities.Dealer", "Dealer")
                         .WithMany()
-                        .HasForeignKey("DealerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DealerId1");
 
                     b.Navigation("Customer");
 
@@ -961,6 +1035,17 @@ namespace mylittle_project.infrastructure.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("mylittle_project.Domain.Entities.PortalAssignment", b =>
+                {
+                    b.HasOne("mylittle_project.Domain.Entities.UserDealer", "DealerUser")
+                        .WithMany("PortalAssignments")
+                        .HasForeignKey("DealerUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DealerUser");
+                });
+
             modelBuilder.Entity("mylittle_project.Domain.Entities.Store", b =>
                 {
                     b.HasOne("Tenant", null)
@@ -979,35 +1064,15 @@ namespace mylittle_project.infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("mylittle_project.Domain.Entities.SubscriptionDealer", b =>
+            modelBuilder.Entity("mylittle_project.Domain.Entities.UserDealer", b =>
                 {
-                    b.OwnsMany("mylittle_project.Domain.Entities.AssignedCategory", "Categories", b1 =>
-                        {
-                            b1.Property<int>("SubscriptionDealerId")
-                                .HasColumnType("int");
+                    b.HasOne("mylittle_project.Domain.Entities.BusinessInfo", "BusinessInfo")
+                        .WithMany()
+                        .HasForeignKey("BusinessInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                            b1.Property<int>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("int");
-
-                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
-
-                            b1.Property<bool>("IsAvailable")
-                                .HasColumnType("bit");
-
-                            b1.Property<string>("Name")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.HasKey("SubscriptionDealerId", "Id");
-
-                            b1.ToTable("AssignedCategories");
-
-                            b1.WithOwner()
-                                .HasForeignKey("SubscriptionDealerId");
-                        });
-
-                    b.Navigation("Categories");
+                    b.Navigation("BusinessInfo");
                 });
 
             modelBuilder.Entity("Tenant", b =>
@@ -1040,8 +1105,7 @@ namespace mylittle_project.infrastructure.Migrations
                 {
                     b.Navigation("ColorPresets");
 
-                    b.Navigation("Media")
-                        .IsRequired();
+                    b.Navigation("Media");
                 });
 
             modelBuilder.Entity("mylittle_project.Domain.Entities.Customer", b =>
@@ -1057,6 +1121,16 @@ namespace mylittle_project.infrastructure.Migrations
             modelBuilder.Entity("mylittle_project.Domain.Entities.Store", b =>
                 {
                     b.Navigation("ProductFilters");
+                });
+
+            modelBuilder.Entity("mylittle_project.Domain.Entities.SubscriptionDealer", b =>
+                {
+                    b.Navigation("Categories");
+                });
+
+            modelBuilder.Entity("mylittle_project.Domain.Entities.UserDealer", b =>
+                {
+                    b.Navigation("PortalAssignments");
                 });
 #pragma warning restore 612, 618
         }

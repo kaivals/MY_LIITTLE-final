@@ -5,25 +5,24 @@ namespace mylittle_project.Domain.Entities
 {
     public class Order
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public int CustomerId { get; set; }
-        public Customer Customer { get; set; }
+        public Customer? Customer { get; set; } 
 
-        public int DealerId { get; set; }
-        public Dealer Dealer { get; set; }
+        public Guid DealerId { get; set; }
+        public UserDealer? Dealer { get; set; }
 
-        public string Portal { get; set; }
-        public string OrderStatus { get; set; }
-        public string PaymentStatus { get; set; }
-        public string ShippingStatus { get; set; }
+        public string Portal { get; set; } = string.Empty;
+        public string OrderStatus { get; set; } = string.Empty;
+        public string PaymentStatus { get; set; } = string.Empty;
+        public string ShippingStatus { get; set; } = string.Empty;
 
         public DateTime OrderDate { get; set; }
         public decimal TotalAmount { get; set; }
 
-        public string Comments { get; set; }
+        public string Comments { get; set; } = string.Empty;
 
-        // ✅ Correct EF relationship
         public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
     }
 }

@@ -18,11 +18,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 );
 
 
-
+builder.Services.AddScoped<IBusinessService, BusinessService>();
 builder.Services.AddScoped<ITenantService, TenantService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
-
+builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
+builder.Services.AddScoped<IUserDealerService, UserDealerService>();
 
 
 

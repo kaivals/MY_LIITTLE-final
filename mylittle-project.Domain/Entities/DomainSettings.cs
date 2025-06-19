@@ -9,8 +9,8 @@ namespace mylittle_project.Domain.Entities
     public class DomainSettings
     {
         public Guid Id { get; set; }
-        public string Subdomain { get; set; }
-        public string CustomDomain { get; set; }
+        public string Subdomain { get; set; } = string.Empty;
+        public string CustomDomain { get; set; } = string.Empty;
         public bool EnableApiAccess { get; set; }
 
         public Guid TenantId { get; set; }

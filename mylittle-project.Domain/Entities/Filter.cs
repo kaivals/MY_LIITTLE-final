@@ -6,11 +6,11 @@ public class Filter
 {
     public Guid Id { get; set; }
 
-    public string Name { get; set; }
-    public string Description { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
     public bool IsActive { get; set; }
-    public string Type { get; set; }           // toggle, range, multiselect
-    public string Category { get; set; }
+    public string Type { get; set; } = string.Empty;          // toggle, range, multiselect
+    public string Category { get; set; } = string.Empty;
 
     public double? RangeStart { get; set; }
     public double? RangeEnd { get; set; }
@@ -19,5 +19,5 @@ public class Filter
     public string? Options { get; set; }       // Comma-separated values (Red,Blue,Green)
 
     public Guid StoreId { get; set; }
-    public Store Store { get; set; }
+    public Store? Store { get; set; }
 }
