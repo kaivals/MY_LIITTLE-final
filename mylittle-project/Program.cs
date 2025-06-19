@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using mylittle_project.Application.Interfaces;
 using mylittle_project.infrastructure.Data;
 using mylittle_project.infrastructure.Services;
+
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +23,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<ITenantService, TenantService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IPortalService, PortalService>();
+builder.Services.AddScoped<ITenentPortalLinkService, TenentPortalLinkService>();
 
 
 

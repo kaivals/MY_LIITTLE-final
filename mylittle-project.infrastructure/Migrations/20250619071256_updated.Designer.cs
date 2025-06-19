@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using mylittle_project.infrastructure.Data;
 
@@ -11,9 +12,11 @@ using mylittle_project.infrastructure.Data;
 namespace mylittle_project.infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250619071256_updated")]
+    partial class updated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -900,36 +903,6 @@ namespace mylittle_project.infrastructure.Migrations
                     b.ToTable("DealerSubscriptions");
                 });
 
-            modelBuilder.Entity("mylittle_project.Domain.Entities.TenentPortalLink", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("LinkType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("LinkedSince")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("SourcePortalId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TargetPortalId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SourcePortalId");
-
-                    b.HasIndex("TargetPortalId");
-
-                    b.ToTable("TenentPortalLinks");
-                });
-
             modelBuilder.Entity("AdminUser", b =>
                 {
                     b.HasOne("Tenant", null)
@@ -1125,25 +1098,6 @@ namespace mylittle_project.infrastructure.Migrations
                         });
 
                     b.Navigation("Categories");
-                });
-
-            modelBuilder.Entity("mylittle_project.Domain.Entities.TenentPortalLink", b =>
-                {
-                    b.HasOne("mylittle_project.Domain.Entities.Portal", "SourcePortal")
-                        .WithMany()
-                        .HasForeignKey("SourcePortalId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("mylittle_project.Domain.Entities.Portal", "TargetPortal")
-                        .WithMany()
-                        .HasForeignKey("TargetPortalId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("SourcePortal");
-
-                    b.Navigation("TargetPortal");
                 });
 
             modelBuilder.Entity("Tenant", b =>
