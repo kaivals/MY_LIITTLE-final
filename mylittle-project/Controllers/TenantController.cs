@@ -12,16 +12,14 @@ using System.Threading.Tasks;
 namespace mylittle_project.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/tenants")]
     public class TenantsController : ControllerBase
     {
         private readonly ITenantService _tenantService;
-        private readonly AppDbContext _context;
 
-        public TenantsController(ITenantService tenantService, AppDbContext context)
+        public TenantsController(ITenantService tenantService)
         {
             _tenantService = tenantService;
-            _context = context;
         }
 
         // GET: api/tenants
@@ -69,19 +67,17 @@ namespace mylittle_project.API.Controllers
         }
 
         // POST: api/tenants
-        [HttpPost]  
-        public async Task<IActionResult> CreateTenant([FromBody] FullTenantDto dto)
+        [HttpPost]
+        public async Task<IActionResult> CreateTenant([FromBody] TenantDto dto)
         {
             if (dto == null)
-
                 return BadRequest("Invalid tenant payload.");
 
             var createdTenant = await _tenantService.CreateAsync(dto);
             return CreatedAtAction(nameof(GetTenant), new { id = createdTenant.Id }, createdTenant);
         }
 
-
-
+        // PUT: api/tenants/{tenantId}/store
         [HttpPut("{tenantId}/store")]
         public async Task<IActionResult> UpdateStore(Guid tenantId, [FromBody] StoreDto dto)
         {
@@ -95,9 +91,19 @@ namespace mylittle_project.API.Controllers
             return Ok("Store updated successfully.");
         }
 
+        // GET: api/tenants/portals
+        [HttpGet("portals")]
+        public async Task<IActionResult> GetAllPortals()
+        {
+            var tenants = await _tenantService.GetAllAsync();
+            var dto = tenants.Select(t => new TenantDto
+            {
+                Id = t.Id,
+                TenantName = t.TenantName
+            });
 
-
-
+            return Ok(dto);
+        }
 
     }
 }

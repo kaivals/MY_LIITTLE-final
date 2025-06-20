@@ -6,45 +6,59 @@ using System.Threading.Tasks;
 namespace mylittle_project.API.Controllers
 {
     [ApiController]
-    [Route("api/licensing-feature")]
-    public class LicensingFeatureController : ControllerBase
+    [Route("api/tenant-feature")]
+    public class TenantFeatureController : ControllerBase
     {
-        private readonly IPortalService _portalService;
+        private readonly ITenantService _tenantService;
 
-        public LicensingFeatureController(IPortalService portalService)
+        public TenantFeatureController(ITenantService tenantService)
         {
-            _portalService = portalService;
+            _tenantService = tenantService;
         }
 
-        // Get all portals (for the left side)
-        [HttpGet("portals")]
-        public async Task<IActionResult> GetAllPortals()
+        // Get all tenants (was "portals" on the left side)
+        [HttpGet("tenants")]
+        public async Task<IActionResult> GetAllTenants()
         {
-            var portals = await _portalService.GetAllPortalsAsync();
-            return Ok(portals);
+            var tenants = await _tenantService.GetAllAsync();
+            var dto = tenants.Select(t => new TenantDto
+            {
+                Id = t.Id,
+                TenantName = t.TenantName,
+                Subdomain = t.Subdomain,
+                IndustryType = t.IndustryType,
+                IsActive = t.IsActive,
+                LastAccessed = t.LastAccessed
+            });
+
+            return Ok(dto);
         }
 
-        // Get all features for a specific portal (for the right side)
-        [HttpGet("{portalId}/features")]
-        public async Task<IActionResult> GetFeaturesByPortal(int portalId)
+        // Get all features for a specific tenant
+        [HttpGet("{tenantId}/features")]
+        public async Task<IActionResult> GetFeaturesByTenant(Guid tenantId)
         {
-            var features = await _portalService.GetFeaturesByPortalIdAsync(portalId);
+            var features = await _tenantService.GetFeatureTogglesAsync(tenantId);
+            if (features == null)
+                return NotFound($"No features found for tenant ID {tenantId}");
+
             return Ok(features);
         }
 
-        // Toggle one feature (when switching single toggle)
+        // Toggle a single feature
         [HttpPost("toggle-feature")]
         public async Task<IActionResult> ToggleFeature([FromBody] UpdateFeatureAccessDto dto)
         {
-            await _portalService.ToggleFeatureAccessAsync(dto);
+            // Optional: You can validate here if necessary
+            await _tenantService.ToggleFeatureAccessAsync(dto);
             return Ok(new { message = "Feature updated successfully" });
         }
 
-        // Toggle all features (bulk toggle for parent category)
+        // Toggle all features for a tenant
         [HttpPost("toggle-all")]
         public async Task<IActionResult> ToggleAllFeatures([FromBody] UpdateAllFeatureAccessDto dto)
         {
-            await _portalService.ToggleAllFeatureAccessAsync(dto);
+            await _tenantService.ToggleAllFeatureAccessAsync(dto);
             return Ok(new { message = "All features updated successfully" });
         }
     }

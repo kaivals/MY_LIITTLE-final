@@ -145,3 +145,15 @@
 /mylittle-project.infrastructure/obj/Release/net9.0/mylittle-project.infrastructure.assets.cache
 /mylittle-project.infrastructure/obj/Release/net9.0/mylittle-project.infrastructure.csproj.AssemblyReference.cache
 /mylittle-project.infrastructure/obj/Release/net9.0/mylittle-project.infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+/mylittle-project.infrastructure/Migrations/20250617095653_Init.cs
+/mylittle-project.infrastructure/Migrations/20250617095653_Init.Designer.cs
+/mylittle-project.infrastructure/Migrations/20250617131337_InitialCreate.Designer.cs
+/mylittle-project.infrastructure/Migrations/20250618064720_update.cs
+/mylittle-project.infrastructure/Migrations/20250618064720_update.Designer.cs
+/mylittle-project.infrastructure/Migrations/20250618111137_FixOrderEntity.cs
+/mylittle-project.infrastructure/Migrations/20250618111137_FixOrderEntity.Designer.cs
+/mylittle-project.infrastructure/Migrations/20250618114640_verify.Designer.cs
+/mylittle-project.infrastructure/Migrations/20250619071256_updated.cs
+/mylittle-project.infrastructure/Migrations/20250619071256_updated.Designer.cs
+/mylittle-project.infrastructure/Migrations/20250619092452_updatedcode.cs
+/mylittle-project.infrastructure/Migrations/20250619095437_tenenttotenent.cs

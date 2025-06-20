@@ -1,8 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using mylittle_project.Application.DTOs;
+﻿using mylittle_project.Application.DTOs;
 using mylittle_project.Application.Interfaces;
 using mylittle_project.Domain.Entities;
 using mylittle_project.infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,10 +23,10 @@ namespace mylittle_project.infrastructure.Services
         {
             var link = new TenentPortalLink
             {
-                SourcePortalId = dto.SourcePortalId,
-                TargetPortalId = dto.TargetPortalId,
+                SourceTenantId = dto.SourceTenantId,
+                TargetTenantId = dto.TargetTenantId,
                 LinkType = dto.LinkType,
-                LinkedSince = dto.LinkedSince == default ? DateTime.UtcNow : dto.LinkedSince
+                LinkedSince = dto.LinkedSince
             };
 
             _context.TenentPortalLinks.Add(link);
@@ -35,48 +35,51 @@ namespace mylittle_project.infrastructure.Services
 
         public async Task AddLinksBatchAsync(TenentPortalLinkBatchDto dto)
         {
-            var existingPortalIds = await _context.Portals
-                .Where(p => dto.TargetPortalIds.Contains(p.Id))
-                .Select(p => p.Id)
-                .ToListAsync();
-
-            var validTargetIds = dto.TargetPortalIds
-                .Distinct()
-                .Where(id => id != dto.SourcePortalId && existingPortalIds.Contains(id))
-                .ToList();
-
-            if (!validTargetIds.Any())
-                throw new Exception("No valid TargetPortalIds found in Portals table.");
-
-            var now = DateTime.UtcNow;
-            var links = validTargetIds.Select(targetId => new TenentPortalLink
+            var links = dto.TargetTenantIds.Select(targetId => new TenentPortalLink
             {
-                SourcePortalId = dto.SourcePortalId,
-                TargetPortalId = targetId,
-                LinkType = dto.LinkType,
-                LinkedSince = now
+                SourceTenantId = dto.SourceTenantId,
+                TargetTenantId = targetId,
+                LinkType = dto.LinkType
             }).ToList();
 
             _context.TenentPortalLinks.AddRange(links);
             await _context.SaveChangesAsync();
         }
 
-
         public async Task<IEnumerable<TenentPortalLinkViewDto>> GetAllLinkedPortalsAsync()
         {
-            return await _context.TenentPortalLinks
-                .Include(l => l.SourcePortal)
-                .Include(l => l.TargetPortal)
-                .Select(l => new TenentPortalLinkViewDto
-                {
-                    SourcePortalId = l.SourcePortalId,
-                    SourcePortalName = l.SourcePortal.Name,
-                    TargetPortalId = l.TargetPortalId,
-                    TargetPortalName = l.TargetPortal.Name,
-                    LinkType = l.LinkType,
-                    LinkedSince = l.LinkedSince
-                })
+            var links = await _context.TenentPortalLinks
+                .Include(l => l.SourceTenant)
+                .Include(l => l.TargetTenant)
                 .ToListAsync();
+
+            return links.Select(link => new TenentPortalLinkViewDto
+            {
+                SourceTenantId = link.SourceTenantId,
+                SourceTenantName = link.SourceTenant?.TenantName,
+                TargetTenantId = link.TargetTenantId,
+                TargetTenantName = link.TargetTenant?.TenantName,
+                LinkType = link.LinkType,
+                LinkedSince = link.LinkedSince
+            });
+        }
+
+        public async Task<IEnumerable<TenantDto>> GetAllTenantsAsync()
+        {
+            var tenants = await _context.Tenants.ToListAsync();
+
+            return tenants.Select(t => new TenantDto
+            {
+                Id = t.Id,
+                TenantName = t.TenantName,
+                TenantNickname = t.TenantNickname,
+                Subdomain = t.Subdomain,
+                IndustryType = t.IndustryType,
+                Status = t.Status,
+                Description = t.Description,
+                IsActive = t.IsActive,
+                LastAccessed = t.LastAccessed
+            });
         }
     }
 }

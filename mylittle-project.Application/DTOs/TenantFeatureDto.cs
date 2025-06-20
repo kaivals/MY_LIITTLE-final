@@ -4,16 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace mylittle_project.Domain.Entities
+namespace mylittle_project.Application.DTOs
 {
-    public class PortalFeature
+    public class TenantFeatureDto
     {
-        public int PortalId { get; set; }
-        public Portal Portal { get; set; }
-
+        public Guid TenantId { get; set; }
         public int FeatureId { get; set; }
-        public Feature Feature { get; set; }
-
+        public string FeatureName { get; set; } // Optional, useful for display
         public bool IsEnabled { get; set; }
     }
 }
+

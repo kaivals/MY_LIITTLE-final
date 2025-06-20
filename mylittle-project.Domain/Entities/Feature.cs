@@ -12,7 +12,7 @@ namespace mylittle_project.Domain.Entities
         public string Name { get; set; }
         public string Category { get; set; }
         public bool IsPremium { get; set; }
-        public ICollection<PortalFeature> PortalFeatures { get; set; }
+        public ICollection<TenantFeature> TenantFeature { get; set; }
         public bool IsEnabled { get; set; }
     }
 }

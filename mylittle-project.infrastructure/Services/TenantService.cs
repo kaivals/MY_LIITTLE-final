@@ -1,8 +1,12 @@
-﻿using mylittle_project.Application.DTOs;
+﻿using Microsoft.EntityFrameworkCore;
+using mylittle_project.Application.DTOs;
 using mylittle_project.Application.Interfaces;
 using mylittle_project.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 using mylittle_project.infrastructure.Data;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace mylittle_project.infrastructure.Services
 {
@@ -28,7 +32,7 @@ namespace mylittle_project.infrastructure.Services
                 .ToListAsync();
         }
 
-        public async Task<Tenant> CreateAsync(FullTenantDto dto)
+        public async Task<Tenant> CreateAsync(TenantDto dto)
         {
             var tenantId = Guid.NewGuid();
 
@@ -41,7 +45,8 @@ namespace mylittle_project.infrastructure.Services
                 IndustryType = dto.IndustryType,
                 Status = dto.Status,
                 Description = dto.Description,
-
+                IsActive = dto.IsActive,
+                LastAccessed = DateTime.UtcNow,
                 AdminUser = new AdminUser
                 {
                     FullName = dto.AdminUser.FullName,
@@ -54,21 +59,19 @@ namespace mylittle_project.infrastructure.Services
                     Gender = dto.AdminUser.Gender,
                     StreetAddress = dto.AdminUser.StreetAddress,
                     City = dto.AdminUser.City,
-                    StateProvince = dto.AdminUser.StateProvince?.ToString(),
-                    ZipPostalCode = dto.AdminUser.ZipPostalCode?.ToString(),
+                    StateProvince = (string)dto.AdminUser.StateProvince,
+                    ZipPostalCode = (string)dto.AdminUser.ZipPostalCode,
                     Country = dto.AdminUser.Country
                 },
-
                 Subscription = new Subscription
                 {
-                    PlanName = dto.Subscription.PlanName?.ToString(),
+                    PlanName = (string)dto.Subscription.PlanName,
                     StartDate = dto.Subscription.StartDate,
                     EndDate = dto.Subscription.EndDate,
                     IsTrial = dto.Subscription.IsTrial,
                     IsActive = dto.Subscription.IsActive,
                     TenantId = tenantId
                 },
-
                 Store = new Store
                 {
                     Country = dto.Country,
@@ -94,7 +97,6 @@ namespace mylittle_project.infrastructure.Services
                         }).ToList()
                         : new List<Filter>()
                 },
-
                 Branding = new Branding
                 {
                     PrimaryColor = dto.Branding.PrimaryColor,
@@ -115,7 +117,6 @@ namespace mylittle_project.infrastructure.Services
                         BackgroundImageUrl = dto.Branding.MediaSettings.BackgroundImageUrl
                     }
                 },
-
                 ContentSettings = new ContentSettings
                 {
                     WelcomeMessage = dto.ContentSettings.WelcomeMessage,
@@ -123,7 +124,6 @@ namespace mylittle_project.infrastructure.Services
                     HomePageContent = dto.ContentSettings.HomePageContent,
                     AboutUs = dto.ContentSettings.AboutUs
                 },
-
                 FeatureSettings = new FeatureSettings
                 {
                     EnableProducts = dto.FeatureSettings.EnableProducts,
@@ -141,7 +141,6 @@ namespace mylittle_project.infrastructure.Services
                     EnableDealerPlan = dto.FeatureSettings.EnableDealerPlan,
                     EnableMultiAdminPanel = dto.FeatureSettings.EnableMultiAdminPanel
                 },
-
                 DomainSettings = new DomainSettings
                 {
                     Subdomain = dto.DomainSettings.Subdomain,
@@ -171,22 +170,24 @@ namespace mylittle_project.infrastructure.Services
             if (tenant == null || tenant.FeatureSettings == null)
                 return null;
 
+            var fs = tenant.FeatureSettings;
+
             return new FeatureSettingsDto
             {
-                EnableProducts = tenant.FeatureSettings.EnableProducts,
-                EnableBrands = tenant.FeatureSettings.EnableBrands,
-                EnableReviews = tenant.FeatureSettings.EnableReviews,
-                EnableProductTags = tenant.FeatureSettings.EnableProductTags,
-                EnableBillingInfo = tenant.FeatureSettings.EnableBillingInfo,
-                EnableShippingInfo = tenant.FeatureSettings.EnableShippingInfo,
-                EnableDeliveryMethod = tenant.FeatureSettings.EnableDeliveryMethod,
-                EnableStripe = tenant.FeatureSettings.EnableStripe,
-                EnablePayPal = tenant.FeatureSettings.EnablePayPal,
-                EnableCashOnDelivery = tenant.FeatureSettings.EnableCashOnDelivery,
-                EnableApiAccess = tenant.FeatureSettings.EnableApiAccess,
-                EnableThemeCustomization = tenant.FeatureSettings.EnableThemeCustomization,
-                EnableDealerPlan = tenant.FeatureSettings.EnableDealerPlan,
-                EnableMultiAdminPanel = tenant.FeatureSettings.EnableMultiAdminPanel
+                EnableProducts = fs.EnableProducts,
+                EnableBrands = fs.EnableBrands,
+                EnableReviews = fs.EnableReviews,
+                EnableProductTags = fs.EnableProductTags,
+                EnableBillingInfo = fs.EnableBillingInfo,
+                EnableShippingInfo = fs.EnableShippingInfo,
+                EnableDeliveryMethod = fs.EnableDeliveryMethod,
+                EnableStripe = fs.EnableStripe,
+                EnablePayPal = fs.EnablePayPal,
+                EnableCashOnDelivery = fs.EnableCashOnDelivery,
+                EnableApiAccess = fs.EnableApiAccess,
+                EnableThemeCustomization = fs.EnableThemeCustomization,
+                EnableDealerPlan = fs.EnableDealerPlan,
+                EnableMultiAdminPanel = fs.EnableMultiAdminPanel
             };
         }
 
@@ -196,35 +197,23 @@ namespace mylittle_project.infrastructure.Services
                 .Include(t => t.FeatureSettings)
                 .FirstOrDefaultAsync(t => t.Id == tenantId);
 
-            if (tenant == null || tenant.FeatureSettings == null)
-                return false;
+            if (tenant?.FeatureSettings == null) return false;
 
             var fs = tenant.FeatureSettings;
 
-            // ✅ Master toggles
-            fs.EnableCategoriesManagement = dto.EnableCategoriesManagement;
-            fs.EnableCustomerInformation = dto.EnableCustomerInformation;
-            fs.EnablePaymentMethods = dto.EnablePaymentMethods;
-            fs.EnableAdvancedFeatures = dto.EnableAdvancedFeatures;
-
-            // ✅ Auto-assign child toggles based on master
-            // Categories Management
             fs.EnableProducts = dto.EnableCategoriesManagement && dto.EnableProducts;
             fs.EnableBrands = dto.EnableCategoriesManagement && dto.EnableBrands;
             fs.EnableReviews = dto.EnableCategoriesManagement && dto.EnableReviews;
             fs.EnableProductTags = dto.EnableCategoriesManagement && dto.EnableProductTags;
 
-            // Customer Information
             fs.EnableBillingInfo = dto.EnableCustomerInformation && dto.EnableBillingInfo;
             fs.EnableShippingInfo = dto.EnableCustomerInformation && dto.EnableShippingInfo;
             fs.EnableDeliveryMethod = dto.EnableCustomerInformation && dto.EnableDeliveryMethod;
 
-            // Payment Methods
             fs.EnableStripe = dto.EnablePaymentMethods && dto.EnableStripe;
             fs.EnablePayPal = dto.EnablePaymentMethods && dto.EnablePayPal;
             fs.EnableCashOnDelivery = dto.EnablePaymentMethods && dto.EnableCashOnDelivery;
 
-            // Advanced Features
             fs.EnableApiAccess = dto.EnableAdvancedFeatures && dto.EnableApiAccess;
             fs.EnableThemeCustomization = dto.EnableAdvancedFeatures && dto.EnableThemeCustomization;
             fs.EnableDealerPlan = dto.EnableAdvancedFeatures && dto.EnableDealerPlan;
@@ -234,25 +223,19 @@ namespace mylittle_project.infrastructure.Services
             return true;
         }
 
-
-
         public async Task<bool> UpdateStoreAsync(Guid tenantId, StoreDto dto)
         {
             var tenant = await _context.Tenants
                 .Include(t => t.Store)
-                    .ThenInclude(s => s.ProductFilters)
+                .ThenInclude(s => s.ProductFilters)
                 .FirstOrDefaultAsync(t => t.Id == tenantId);
 
-            if (tenant == null)
-                return false;
-
-            if (tenant.Store == null)
+            if (tenant?.Store == null)
             {
-                tenant.Store = new Store { TenantId = tenantId };
+                tenant!.Store = new Store { TenantId = tenantId };
                 _context.Stores.Add(tenant.Store);
             }
 
-            // Update store fields
             tenant.Store.Country = dto.Country;
             tenant.Store.Currency = dto.Currency;
             tenant.Store.Language = dto.Language;
@@ -263,10 +246,7 @@ namespace mylittle_project.infrastructure.Services
 
             if (dto.EnableFilters && dto.ProductFilters != null)
             {
-                // Remove old filters
                 _context.Filters.RemoveRange(tenant.Store.ProductFilters);
-
-                // Add new filters
                 tenant.Store.ProductFilters = dto.ProductFilters.Select(f => new Filter
                 {
                     Name = f.Name,
@@ -282,7 +262,6 @@ namespace mylittle_project.infrastructure.Services
             }
             else
             {
-                // Disable filters: clear them
                 _context.Filters.RemoveRange(tenant.Store.ProductFilters);
                 tenant.Store.ProductFilters.Clear();
             }
@@ -292,6 +271,21 @@ namespace mylittle_project.infrastructure.Services
         }
 
         public Task<IEnumerable<ProductDto>> GetProductListingsByTenantAsync(Guid tenantId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<FeatureDto>> GetFeaturesByTenantIdAsync(Guid tenantId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task ToggleFeatureAccessAsync(UpdateFeatureAccessDto dto)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task ToggleAllFeatureAccessAsync(UpdateAllFeatureAccessDto dto)
         {
             throw new NotImplementedException();
         }
