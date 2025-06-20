@@ -512,6 +512,33 @@ namespace mylittle_project.infrastructure.Migrations
                     b.ToTable("DomainSettings");
                 });
 
+            modelBuilder.Entity("mylittle_project.Domain.Entities.Feature", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsPremium")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Features");
+                });
+
             modelBuilder.Entity("mylittle_project.Domain.Entities.FeatureSettings", b =>
                 {
                     b.Property<Guid>("Id")
@@ -686,6 +713,47 @@ namespace mylittle_project.infrastructure.Migrations
                     b.HasIndex("DealerUserId");
 
                     b.ToTable("PortalAssignments");
+                });
+
+            modelBuilder.Entity("mylittle_project.Domain.Entities.Portal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastAccessed")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Portals");
+                });
+
+            modelBuilder.Entity("mylittle_project.Domain.Entities.PortalFeature", b =>
+                {
+                    b.Property<int>("PortalId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FeatureId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("bit");
+
+                    b.HasKey("PortalId", "FeatureId");
+
+                    b.HasIndex("FeatureId");
+
+                    b.ToTable("PortalFeatures");
                 });
 
             modelBuilder.Entity("mylittle_project.Domain.Entities.Product", b =>
@@ -903,6 +971,36 @@ namespace mylittle_project.infrastructure.Migrations
                     b.ToTable("UserDealers");
                 });
 
+            modelBuilder.Entity("mylittle_project.Domain.Entities.TenentPortalLink", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("LinkType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LinkedSince")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("SourcePortalId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TargetPortalId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SourcePortalId");
+
+                    b.HasIndex("TargetPortalId");
+
+                    b.ToTable("TenentPortalLinks");
+                });
+
             modelBuilder.Entity("AdminUser", b =>
                 {
                     b.HasOne("Tenant", null)
@@ -1046,6 +1144,25 @@ namespace mylittle_project.infrastructure.Migrations
                     b.Navigation("DealerUser");
                 });
 
+            modelBuilder.Entity("mylittle_project.Domain.Entities.PortalFeature", b =>
+                {
+                    b.HasOne("mylittle_project.Domain.Entities.Feature", "Feature")
+                        .WithMany("PortalFeatures")
+                        .HasForeignKey("FeatureId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("mylittle_project.Domain.Entities.Portal", "Portal")
+                        .WithMany("PortalFeatures")
+                        .HasForeignKey("PortalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Feature");
+
+                    b.Navigation("Portal");
+                });
+
             modelBuilder.Entity("mylittle_project.Domain.Entities.Store", b =>
                 {
                     b.HasOne("Tenant", null)
@@ -1073,6 +1190,25 @@ namespace mylittle_project.infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("BusinessInfo");
+                });
+
+            modelBuilder.Entity("mylittle_project.Domain.Entities.TenentPortalLink", b =>
+                {
+                    b.HasOne("mylittle_project.Domain.Entities.Portal", "SourcePortal")
+                        .WithMany()
+                        .HasForeignKey("SourcePortalId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("mylittle_project.Domain.Entities.Portal", "TargetPortal")
+                        .WithMany()
+                        .HasForeignKey("TargetPortalId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("SourcePortal");
+
+                    b.Navigation("TargetPortal");
                 });
 
             modelBuilder.Entity("Tenant", b =>
@@ -1113,9 +1249,19 @@ namespace mylittle_project.infrastructure.Migrations
                     b.Navigation("Orders");
                 });
 
+            modelBuilder.Entity("mylittle_project.Domain.Entities.Feature", b =>
+                {
+                    b.Navigation("PortalFeatures");
+                });
+
             modelBuilder.Entity("mylittle_project.Domain.Entities.Order", b =>
                 {
                     b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("mylittle_project.Domain.Entities.Portal", b =>
+                {
+                    b.Navigation("PortalFeatures");
                 });
 
             modelBuilder.Entity("mylittle_project.Domain.Entities.Store", b =>

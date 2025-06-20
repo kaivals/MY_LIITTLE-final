@@ -1,8 +1,8 @@
 ﻿using mylittle_project.Application.DTOs;
 using mylittle_project.Application.Interfaces;
 using mylittle_project.Domain.Entities;
-using mylittle_project.infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using mylittle_project.infrastructure.Data;
 
 namespace mylittle_project.infrastructure.Services
 {

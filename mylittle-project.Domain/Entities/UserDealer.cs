@@ -17,7 +17,7 @@ namespace mylittle_project.Domain.Entities
         public Guid BusinessInfoId { get; set; }
         public BusinessInfo BusinessInfo { get; set; } = null!;
         public ICollection<BusinessInfo>? Businesses { get; set; }
-
+        public ICollection<TenentPortalLink> PortalLinks { get; set; } = new List<TenentPortalLink>();  // ✔️ Dealer ↔ Portals
         public ICollection<PortalAssignment> PortalAssignments { get; set; } = new List<PortalAssignment>();
     }
 

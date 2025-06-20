@@ -129,6 +129,13 @@
 /mylittle-project/mylittle-project.http
 /mylittle-project.sln
 /.editorconfig
+<<<<<<< HEAD
+=======
+/mylittle-project/obj/Release/net9.0/mylittle-project.AssemblyInfoInputs.cache
+/mylittle-project/obj/Release/net9.0/mylittle-project.assets.cache
+/mylittle-project/obj/Release/net9.0/mylittle-project.csproj.AssemblyReference.cache
+/mylittle-project/obj/Release/net9.0/mylittle-project.GeneratedMSBuildEditorConfig.editorconfig
+>>>>>>> fe99dbddba4f8c1bd960d5da780070727e6643dc
 /mylittle-project.Application/obj/Release/net9.0/mylittle-project.Application.AssemblyInfoInputs.cache
 /mylittle-project.Application/obj/Release/net9.0/mylittle-project.Application.assets.cache
 /mylittle-project.Application/obj/Release/net9.0/mylittle-project.Application.csproj.AssemblyReference.cache
@@ -141,3 +148,11 @@
 /mylittle-project.infrastructure/obj/Release/net9.0/mylittle-project.infrastructure.assets.cache
 /mylittle-project.infrastructure/obj/Release/net9.0/mylittle-project.infrastructure.csproj.AssemblyReference.cache
 /mylittle-project.infrastructure/obj/Release/net9.0/mylittle-project.infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+/mylittle-project.infrastructure/Migrations/20250618114640_verify.cs
+/mylittle-project.infrastructure/Migrations/20250618114640_verify.Designer.cs
+/mylittle-project.infrastructure/Migrations/20250619071256_updated.cs
+/mylittle-project.infrastructure/Migrations/20250619071256_updated.Designer.cs
+/mylittle-project.infrastructure/Migrations/20250619092452_updatedcode.cs
+/mylittle-project.infrastructure/Migrations/20250619092452_updatedcode.Designer.cs
+/mylittle-project.infrastructure/Migrations/20250619095437_tenenttotenent.cs
+/mylittle-project.infrastructure/Migrations/20250619095437_tenenttotenent.Designer.cs
