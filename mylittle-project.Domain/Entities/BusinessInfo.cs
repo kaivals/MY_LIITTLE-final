@@ -9,7 +9,8 @@ namespace mylittle_project.Domain.Entities
 {
     public class BusinessInfo
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
+        public Guid UserDealerId { get; set; }
         public string DealerName { get; set; } = string.Empty;
         public string BusinessName { get; set; } = string.Empty;
         public string BusinessNumber { get; set; } = string.Empty;
@@ -23,6 +24,7 @@ namespace mylittle_project.Domain.Entities
         public string State { get; set; } = string.Empty;
         public string City { get; set; } = string.Empty;
         public string Timezone { get; set; } = string.Empty;
+        public UserDealer? Dealer { get; set; }
     }
 }
 

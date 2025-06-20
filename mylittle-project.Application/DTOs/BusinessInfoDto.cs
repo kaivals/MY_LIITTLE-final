@@ -8,6 +8,7 @@ namespace mylittle_project.Application.DTOs
 {
     public class BusinessInfoDto
     {
+        public Guid UserDealerId { get; set; }
         public string DealerName { get; set; } = string.Empty;
         public string BusinessName { get; set; } = string.Empty;
         public string BusinessNumber { get; set; } = string.Empty;

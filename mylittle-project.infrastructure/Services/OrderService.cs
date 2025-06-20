@@ -27,7 +27,7 @@ namespace mylittle_project.infrastructure.Services
                 .ToListAsync();
         }
 
-        public async Task<Order> GetOrderByIdAsync(int id)
+        public async Task<Order> GetOrderByIdAsync(Guid id)
         {
             return await _context.Orders
                 .Include(o => o.OrderItems)

@@ -19,7 +19,7 @@ namespace mylittle_project.infrastructure.Services
             _context = context;
         }
 
-        public async Task<int> AssignSubscriptionAsync(SubscriptionDealerDto dto)
+        public async Task<Guid> AssignSubscriptionAsync(SubscriptionDealerDto dto)
         {
             var assignment = new SubscriptionDealer
             {
@@ -40,7 +40,7 @@ namespace mylittle_project.infrastructure.Services
 
             _context.DealerSubscriptions.Add(assignment); // ✅ Correct DbSet
             await _context.SaveChangesAsync();
-            return assignment.Id;
+            return assignment.Id; // Return Guid instead of int
         }
     }
 }

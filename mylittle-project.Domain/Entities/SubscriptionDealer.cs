@@ -8,9 +8,9 @@ namespace mylittle_project.Domain.Entities
 {
     public class SubscriptionDealer
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
-        public int TenantId { get; set; }  // Linked Tenant ID
+        public Guid TenantId { get; set; }  // Linked Tenant ID
         public string PortalName { get; set; } = string.Empty; // Portal name (e.g. “Select tenant portal”)
 
         public List<AssignedCategory> Categories { get; set; } = new();
@@ -26,7 +26,7 @@ namespace mylittle_project.Domain.Entities
     }
     public class AssignedCategory
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; } = string.Empty;       // e.g., Cars, Bikes
         public bool IsAvailable { get; set; }   // true if available to assign
     }

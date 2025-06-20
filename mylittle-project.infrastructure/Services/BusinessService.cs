@@ -15,7 +15,7 @@ namespace mylittle_project.infrastructure.Services
             _context = context;
         }
 
-        public async Task<int> CreateBusinessInfoAsync(BusinessInfoDto dto)
+        public async Task<Guid> CreateBusinessInfoAsync(BusinessInfoDto dto)
         {
             var business = new BusinessInfo
             {

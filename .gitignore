@@ -129,10 +129,13 @@
 /mylittle-project/mylittle-project.http
 /mylittle-project.sln
 /.editorconfig
+<<<<<<< HEAD
+=======
 /mylittle-project/obj/Release/net9.0/mylittle-project.AssemblyInfoInputs.cache
 /mylittle-project/obj/Release/net9.0/mylittle-project.assets.cache
 /mylittle-project/obj/Release/net9.0/mylittle-project.csproj.AssemblyReference.cache
 /mylittle-project/obj/Release/net9.0/mylittle-project.GeneratedMSBuildEditorConfig.editorconfig
+>>>>>>> fe99dbddba4f8c1bd960d5da780070727e6643dc
 /mylittle-project.Application/obj/Release/net9.0/mylittle-project.Application.AssemblyInfoInputs.cache
 /mylittle-project.Application/obj/Release/net9.0/mylittle-project.Application.assets.cache
 /mylittle-project.Application/obj/Release/net9.0/mylittle-project.Application.csproj.AssemblyReference.cache
@@ -145,6 +148,7 @@
 /mylittle-project.infrastructure/obj/Release/net9.0/mylittle-project.infrastructure.assets.cache
 /mylittle-project.infrastructure/obj/Release/net9.0/mylittle-project.infrastructure.csproj.AssemblyReference.cache
 /mylittle-project.infrastructure/obj/Release/net9.0/mylittle-project.infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+<<<<<<< HEAD
 /mylittle-project.infrastructure/Migrations/20250617095653_Init.cs
 /mylittle-project.infrastructure/Migrations/20250617095653_Init.Designer.cs
 /mylittle-project.infrastructure/Migrations/20250617131337_InitialCreate.Designer.cs
@@ -152,8 +156,21 @@
 /mylittle-project.infrastructure/Migrations/20250618064720_update.Designer.cs
 /mylittle-project.infrastructure/Migrations/20250618111137_FixOrderEntity.cs
 /mylittle-project.infrastructure/Migrations/20250618111137_FixOrderEntity.Designer.cs
+=======
+/mylittle-project.infrastructure/Migrations/20250618114640_verify.cs
+>>>>>>> dda65cb3095393bc2fdb34f4645daca7f4d137bd
 /mylittle-project.infrastructure/Migrations/20250618114640_verify.Designer.cs
 /mylittle-project.infrastructure/Migrations/20250619071256_updated.cs
 /mylittle-project.infrastructure/Migrations/20250619071256_updated.Designer.cs
 /mylittle-project.infrastructure/Migrations/20250619092452_updatedcode.cs
+<<<<<<< HEAD
 /mylittle-project.infrastructure/Migrations/20250619095437_tenenttotenent.cs
+=======
+/mylittle-project.infrastructure/Migrations/20250619092452_updatedcode.Designer.cs
+/mylittle-project.infrastructure/Migrations/20250619095437_tenenttotenent.cs
+/mylittle-project.infrastructure/Migrations/20250619095437_tenenttotenent.Designer.cs
+>>>>>>> dda65cb3095393bc2fdb34f4645daca7f4d137bd
+/mylittle-project.infrastructure/Migrations/20250619112105_AddUserDealerAndPortalAssignment.cs
+/mylittle-project.infrastructure/Migrations/20250619112105_AddUserDealerAndPortalAssignment.Designer.cs
+/mylittle-project.infrastructure/Migrations/20250620062421_init.cs
+/mylittle-project.infrastructure/Migrations/AppDbContextModelSnapshot.cs
