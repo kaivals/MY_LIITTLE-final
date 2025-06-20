@@ -5,7 +5,7 @@
 namespace mylittle_project.infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class tenenttotenent : Migration
+    public partial class mylife : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
