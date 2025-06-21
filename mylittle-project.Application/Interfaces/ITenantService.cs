@@ -8,24 +8,19 @@ namespace mylittle_project.Application.Interfaces
 {
     public interface ITenantService
     {
-        // Core Tenant Operations
+        // Tenant Management
         Task<IEnumerable<Tenant>> GetAllAsync();
         Task<Tenant> CreateAsync(TenantDto dto);
         Task<Tenant?> GetTenantWithFeaturesAsync(Guid tenantId);
 
-        // Feature Toggle Management
+        // Feature Settings Management (Single table logic)
         Task<FeatureSettingsDto?> GetFeatureTogglesAsync(Guid tenantId);
         Task<bool> UpdateFeatureTogglesAsync(Guid tenantId, FeatureSettingsDto dto);
 
-        // Individual or bulk feature control (replacing legacy PortalFeature style)
-        Task<IEnumerable<FeatureDto>> GetFeaturesByTenantIdAsync(Guid tenantId);
-        Task ToggleFeatureAccessAsync(UpdateFeatureAccessDto dto);
-        Task ToggleAllFeatureAccessAsync(UpdateAllFeatureAccessDto dto);
-
-        // Store Info
+        // Store Management
         Task<bool> UpdateStoreAsync(Guid tenantId, StoreDto dto);
 
-        // Product Listing
-        Task<IEnumerable<ProductDto>> GetProductListingsByTenantAsync(Guid tenantId);
+        
+
     }
 }

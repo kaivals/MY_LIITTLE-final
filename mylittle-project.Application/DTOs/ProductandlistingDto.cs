@@ -1,6 +1,6 @@
 ﻿namespace mylittle_project.Application.DTOs
 {
-    public class ProductDto
+    public class ProductandlistingDto
     {
         public Guid Id { get; set; }
         public string ProductName { get; set; }

@@ -4,7 +4,6 @@ using mylittle_project.Application.Interfaces;
 using mylittle_project.Domain.Entities;
 using mylittle_project.infrastructure.Data;
 
-
 namespace mylittle_project.infrastructure.Services
 {
     public class ProductService : IProductService
@@ -16,39 +15,43 @@ namespace mylittle_project.infrastructure.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<ProductDto>> GetProductListingsByPortalAsync(string portal)
+        public async Task<IEnumerable<ProductDto>> GetProductListingsByTenantAsync(Guid tenantId)
         {
-            var listings = await _context.Products
-                .Where(p => p.Portal == portal)
+            var products = await _context.Products
+                .Where(p => p.TenantId == tenantId)
                 .ToListAsync();
 
-            return listings.Select(p => new ProductDto
+            return products.Select(p => new ProductDto
             {
-                ProductName = p.productname,
+                Id = p.Id,
+                ProductName = p.ProductName,
                 Category = p.Category,
                 Brand = p.Brand,
                 Price = p.Price,
                 Stock = p.Stock,
                 Status = p.Status,
-                Portal = p.Portal
+                Description = p.Description,
+                TenantId = p.TenantId
             });
         }
 
-        public async Task<IEnumerable<ProductDto>> GetProductListingsByTenantAsync(Guid tenantId)
+        public async Task<IEnumerable<ProductandlistingDto>> GetProductandlistingByTenantAsync(Guid tenantId)
         {
             var listings = await _context.Products
                 .Where(p => p.TenantId == tenantId)
                 .ToListAsync();
 
-            return listings.Select(p => new ProductDto
+            return listings.Select(p => new ProductandlistingDto
             {
-                ProductName = p.productname,
+                Id = p.Id,
+                ProductName = p.ProductName,
                 Category = p.Category,
                 Brand = p.Brand,
                 Price = p.Price,
                 Stock = p.Stock,
                 Status = p.Status,
-                Portal = p.Portal
+                Description = p.Description,
+                TenantId = p.TenantId
             });
         }
     }

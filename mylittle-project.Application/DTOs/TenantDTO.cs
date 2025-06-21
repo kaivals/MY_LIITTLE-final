@@ -8,6 +8,7 @@ namespace mylittle_project.Application.DTOs
         public Guid Id { get; set; }
 
         // Basic Tenant Info
+        public string Name { get; set; }
         public string TenantName { get; set; }
         public string TenantNickname { get; set; }
         public string Subdomain { get; set; }

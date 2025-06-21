@@ -8,18 +8,11 @@ namespace mylittle_project.Controllers
     [Route("api/[controller]")]
     public class ProductAndListingController : ControllerBase
     {
-        private readonly IProductService _productService;
+        private readonly IProductService _productService; // 👈 Use IProductService
 
         public ProductAndListingController(IProductService productService)
         {
             _productService = productService;
-        }
-
-        [HttpGet("ByPortal/{portal}")]
-        public async Task<IActionResult> GetProductsByPortal(string portal)
-        {
-            var products = await _productService.GetProductListingsByPortalAsync(portal);
-            return Ok(products);
         }
 
         [HttpGet("ByTenant/{tenantId}")]

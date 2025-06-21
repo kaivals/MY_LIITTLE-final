@@ -39,6 +39,7 @@ namespace mylittle_project.infrastructure.Services
             var tenant = new Tenant
             {
                 Id = tenantId,
+                Name = dto.TenantName,
                 TenantName = dto.TenantName,
                 TenantNickname = dto.TenantNickname,
                 Subdomain = dto.Subdomain,
@@ -59,13 +60,13 @@ namespace mylittle_project.infrastructure.Services
                     Gender = dto.AdminUser.Gender,
                     StreetAddress = dto.AdminUser.StreetAddress,
                     City = dto.AdminUser.City,
-                    StateProvince = (string)dto.AdminUser.StateProvince,
-                    ZipPostalCode = (string)dto.AdminUser.ZipPostalCode,
+                    StateProvince = dto.AdminUser.StateProvince,
+                    ZipPostalCode = dto.AdminUser.ZipPostalCode,
                     Country = dto.AdminUser.Country
                 },
                 Subscription = new Subscription
                 {
-                    PlanName = (string)dto.Subscription.PlanName,
+                    PlanName = dto.Subscription.PlanName,
                     StartDate = dto.Subscription.StartDate,
                     EndDate = dto.Subscription.EndDate,
                     IsTrial = dto.Subscription.IsTrial,
@@ -126,20 +127,25 @@ namespace mylittle_project.infrastructure.Services
                 },
                 FeatureSettings = new FeatureSettings
                 {
+                    EnableCategoriesManagement = dto.FeatureSettings.EnableCategoriesManagement,
                     EnableProducts = dto.FeatureSettings.EnableProducts,
                     EnableBrands = dto.FeatureSettings.EnableBrands,
                     EnableReviews = dto.FeatureSettings.EnableReviews,
                     EnableProductTags = dto.FeatureSettings.EnableProductTags,
+                    EnableCustomerInformation = dto.FeatureSettings.EnableCustomerInformation,
                     EnableBillingInfo = dto.FeatureSettings.EnableBillingInfo,
                     EnableShippingInfo = dto.FeatureSettings.EnableShippingInfo,
                     EnableDeliveryMethod = dto.FeatureSettings.EnableDeliveryMethod,
+                    EnablePaymentMethods = dto.FeatureSettings.EnablePaymentMethods,
                     EnableStripe = dto.FeatureSettings.EnableStripe,
                     EnablePayPal = dto.FeatureSettings.EnablePayPal,
                     EnableCashOnDelivery = dto.FeatureSettings.EnableCashOnDelivery,
+                    EnableAdvancedFeatures = dto.FeatureSettings.EnableAdvancedFeatures,
                     EnableApiAccess = dto.FeatureSettings.EnableApiAccess,
                     EnableThemeCustomization = dto.FeatureSettings.EnableThemeCustomization,
                     EnableDealerPlan = dto.FeatureSettings.EnableDealerPlan,
-                    EnableMultiAdminPanel = dto.FeatureSettings.EnableMultiAdminPanel
+                    EnableMultiAdminPanel = dto.FeatureSettings.EnableMultiAdminPanel,
+                    TenantId = tenantId
                 },
                 DomainSettings = new DomainSettings
                 {
@@ -174,16 +180,21 @@ namespace mylittle_project.infrastructure.Services
 
             return new FeatureSettingsDto
             {
+                TenantId = tenantId,
+                EnableCategoriesManagement = fs.EnableCategoriesManagement,
                 EnableProducts = fs.EnableProducts,
                 EnableBrands = fs.EnableBrands,
                 EnableReviews = fs.EnableReviews,
                 EnableProductTags = fs.EnableProductTags,
+                EnableCustomerInformation = fs.EnableCustomerInformation,
                 EnableBillingInfo = fs.EnableBillingInfo,
                 EnableShippingInfo = fs.EnableShippingInfo,
                 EnableDeliveryMethod = fs.EnableDeliveryMethod,
+                EnablePaymentMethods = fs.EnablePaymentMethods,
                 EnableStripe = fs.EnableStripe,
                 EnablePayPal = fs.EnablePayPal,
                 EnableCashOnDelivery = fs.EnableCashOnDelivery,
+                EnableAdvancedFeatures = fs.EnableAdvancedFeatures,
                 EnableApiAccess = fs.EnableApiAccess,
                 EnableThemeCustomization = fs.EnableThemeCustomization,
                 EnableDealerPlan = fs.EnableDealerPlan,
@@ -201,19 +212,23 @@ namespace mylittle_project.infrastructure.Services
 
             var fs = tenant.FeatureSettings;
 
+            fs.EnableCategoriesManagement = dto.EnableCategoriesManagement;
             fs.EnableProducts = dto.EnableCategoriesManagement && dto.EnableProducts;
             fs.EnableBrands = dto.EnableCategoriesManagement && dto.EnableBrands;
             fs.EnableReviews = dto.EnableCategoriesManagement && dto.EnableReviews;
             fs.EnableProductTags = dto.EnableCategoriesManagement && dto.EnableProductTags;
 
+            fs.EnableCustomerInformation = dto.EnableCustomerInformation;
             fs.EnableBillingInfo = dto.EnableCustomerInformation && dto.EnableBillingInfo;
             fs.EnableShippingInfo = dto.EnableCustomerInformation && dto.EnableShippingInfo;
             fs.EnableDeliveryMethod = dto.EnableCustomerInformation && dto.EnableDeliveryMethod;
 
+            fs.EnablePaymentMethods = dto.EnablePaymentMethods;
             fs.EnableStripe = dto.EnablePaymentMethods && dto.EnableStripe;
             fs.EnablePayPal = dto.EnablePaymentMethods && dto.EnablePayPal;
             fs.EnableCashOnDelivery = dto.EnablePaymentMethods && dto.EnableCashOnDelivery;
 
+            fs.EnableAdvancedFeatures = dto.EnableAdvancedFeatures;
             fs.EnableApiAccess = dto.EnableAdvancedFeatures && dto.EnableApiAccess;
             fs.EnableThemeCustomization = dto.EnableAdvancedFeatures && dto.EnableThemeCustomization;
             fs.EnableDealerPlan = dto.EnableAdvancedFeatures && dto.EnableDealerPlan;
@@ -270,24 +285,8 @@ namespace mylittle_project.infrastructure.Services
             return true;
         }
 
-        public Task<IEnumerable<ProductDto>> GetProductListingsByTenantAsync(Guid tenantId)
-        {
-            throw new NotImplementedException();
-        }
+        
 
-        public Task<IEnumerable<FeatureDto>> GetFeaturesByTenantIdAsync(Guid tenantId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task ToggleFeatureAccessAsync(UpdateFeatureAccessDto dto)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task ToggleAllFeatureAccessAsync(UpdateAllFeatureAccessDto dto)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }

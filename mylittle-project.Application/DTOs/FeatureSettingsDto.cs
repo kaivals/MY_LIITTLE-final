@@ -2,6 +2,7 @@
 {
     // === Master Toggles ===
 
+    public Guid TenantId { get; set; }
     public bool EnableCategoriesManagement { get; set; }
     public bool EnableCustomerInformation { get; set; }
     public bool EnablePaymentMethods { get; set; }

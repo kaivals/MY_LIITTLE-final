@@ -1,32 +1,33 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using mylittle_project.Application.DTOs;
 using mylittle_project.Application.Interfaces;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace mylittle_project.API.Controllers
 {
     [ApiController]
-    [Route("api/tenant-feature")]
-    public class TenantFeatureController : ControllerBase
+    [Route("api/tenant-feature-settings")]
+    public class LicensingFeatureController : ControllerBase
     {
         private readonly ITenantService _tenantService;
 
-        public TenantFeatureController(ITenantService tenantService)
+        public LicensingFeatureController(ITenantService tenantService)
         {
             _tenantService = tenantService;
         }
 
-        // Get all tenants (was "portals" on the left side)
+        // GET: api/tenant-feature-settings/tenants
         [HttpGet("tenants")]
         public async Task<IActionResult> GetAllTenants()
         {
             var tenants = await _tenantService.GetAllAsync();
-            var dto = tenants.Select(t => new TenantDto
+            var dto = tenants.Select(t => new
             {
                 Id = t.Id,
                 TenantName = t.TenantName,
                 Subdomain = t.Subdomain,
-                IndustryType = t.IndustryType,
                 IsActive = t.IsActive,
                 LastAccessed = t.LastAccessed
             });
@@ -34,32 +35,29 @@ namespace mylittle_project.API.Controllers
             return Ok(dto);
         }
 
-        // Get all features for a specific tenant
-        [HttpGet("{tenantId}/features")]
-        public async Task<IActionResult> GetFeaturesByTenant(Guid tenantId)
+        // GET: api/tenant-feature-settings/{tenantId}
+        [HttpGet("{tenantId}")]
+        public async Task<IActionResult> GetFeatureSettings(Guid tenantId)
         {
-            var features = await _tenantService.GetFeatureTogglesAsync(tenantId);
-            if (features == null)
-                return NotFound($"No features found for tenant ID {tenantId}");
+            var settings = await _tenantService.GetFeatureTogglesAsync(tenantId);
+            if (settings == null)
+                return NotFound($"Feature settings not found for tenant {tenantId}");
 
-            return Ok(features);
+            return Ok(settings);
         }
 
-        // Toggle a single feature
-        [HttpPost("toggle-feature")]
-        public async Task<IActionResult> ToggleFeature([FromBody] UpdateFeatureAccessDto dto)
+        // PUT: api/tenant-feature-settings/{tenantId}
+        [HttpPut("{tenantId}")]
+        public async Task<IActionResult> UpdateFeatureSettings(Guid tenantId, [FromBody] FeatureSettingsDto dto)
         {
-            // Optional: You can validate here if necessary
-            await _tenantService.ToggleFeatureAccessAsync(dto);
-            return Ok(new { message = "Feature updated successfully" });
-        }
+            if (tenantId != dto.TenantId)
+                return BadRequest("Tenant ID mismatch between route and body.");
 
-        // Toggle all features for a tenant
-        [HttpPost("toggle-all")]
-        public async Task<IActionResult> ToggleAllFeatures([FromBody] UpdateAllFeatureAccessDto dto)
-        {
-            await _tenantService.ToggleAllFeatureAccessAsync(dto);
-            return Ok(new { message = "All features updated successfully" });
+            var success = await _tenantService.UpdateFeatureTogglesAsync(tenantId, dto);
+            if (!success)
+                return NotFound("Tenant or feature settings not found.");
+
+            return Ok(new { message = "Feature settings updated successfully." });
         }
     }
 }

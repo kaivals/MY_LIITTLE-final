@@ -30,6 +30,6 @@ namespace mylittle_project.Domain.Entities
         public ICollection<ActivityLog> ActivityLogs { get; set; }
 
         // Optionally, you can still include portal features (if needed)
-        public ICollection<TenantFeature> TenantFeature { get; set; }
+       
     }
 }
